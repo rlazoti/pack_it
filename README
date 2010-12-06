@@ -1,0 +1,7 @@
+Pack It - Create a folder with the different files between two git branches.
+
+Example: ./pack_it.rb package a_branch another_branch
+
+package => folder where the files are copied
+a_branch => first branch used in the comparison
+another_branch = second branch used in the comparison

@@ -64,7 +64,7 @@ module PackIt
   def self.run(arguments)
     if not PreProcessor.are_the_arguments_valid?(arguments)
       puts "
-            Pack It - Create a folder with the different files between two branches of git.
+            Pack It - Create a folder with the different files between two git branches.
             
             Example: ./pack_it.rb package a_branch another_branch
             
