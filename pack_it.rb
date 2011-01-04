@@ -23,41 +23,45 @@ module PackIt
     private
 
     def list_different_files_between_branches
+      deleted_file_tag = "D"
+      tab_character = "\t"
       files = Array.new
+
       (%x[git diff --name-status #{@first_branch}..#{@second_branch}]).split("\n").each do |file|
-        f = file.split("\t")
-        files.push(f[1]) unless f[0].eql?("D")
+        input = file.split(tab_character)
+        files.push(input[1]) unless input[0].eql?(deleted_file_tag)
       end
       files
     end
-    
+
     def list_directories_to_create(files)
       directories = Array.new
-      files.each{ |f| directories.push(File.dirname(f)) }
+      files.each{ |file| directories.push(File.dirname(file)) }
       directories
     end
 
     def create_directories(directories)
-      directories.each{ |d| FileUtils.mkdir_p("#{@directory}/#{d}") unless d.eql?(".") }
+      home_directory_path = "."
+      directories.each{ |dir| FileUtils.mkdir_p("#{@directory}/#{dir}") unless dir.eql?(home_directory_path) }
     end
 
     def copy_files_to_destiny(files)
-      files.each { |f| FileUtils.cp_r(f, "#{@directory}/#{f}") }
+      files.each { |file| FileUtils.cp_r(file, "#{@directory}/#{file}") }
     end
 
   end
   
   class PreProcessor    
     def self.are_the_arguments_valid?(args)
-      true unless args.empty? or args.size != 3
+      not (args.empty? or args.size != 3)
     end
     
     def self.is_the_git_installed?
-      true if %x[git --version].include?("git version")
+      %x[git --version].include?("git version")
     end
     
     def self.is_a_git_repository?
-      true if File.exists?(".git") && File.directory?(".git")
+      File.exists?(".git") && File.directory?(".git")
     end
   end
 
@@ -76,7 +80,7 @@ module PackIt
             Developed by Rodrigo Lazoti (rodrigolazoti@gmail.com)
             http://www.rodrigolazoti.com.br
            "
-           
+
     elsif not PreProcessor.is_the_git_installed?
       puts "
             You have nothing GIT client in this machine. 
@@ -85,7 +89,7 @@ module PackIt
 
     elsif not PreProcessor.is_a_git_repository?
       puts "The current directory isn't a git repository."
-      
+
     else
       packager = Packager.new(arguments[0], arguments[1], arguments[2])
       packager.run
