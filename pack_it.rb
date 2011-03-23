@@ -46,7 +46,7 @@ module PackIt
     end
 
     def copy_files_to_destiny(files)
-      files.each { |file| FileUtils.cp_r(file, "#{@directory}/#{file}") }
+      files.each { |file| FileUtils.cp_r(file, "#{@directory}/#{file}") if File.exist?(file) }
     end
 
   end
