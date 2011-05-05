@@ -3,7 +3,7 @@
 require 'fileutils'
 
 module PackIt
-  
+
   class Packager
     @directory
     @first_branch
@@ -50,16 +50,16 @@ module PackIt
     end
 
   end
-  
-  class PreProcessor    
+
+  class PreProcessor
     def self.are_the_arguments_valid?(args)
       not (args.empty? or args.size != 3)
     end
-    
+
     def self.is_the_git_installed?
       %x[git --version].include?("git version")
     end
-    
+
     def self.is_a_git_repository?
       File.exists?(".git") && File.directory?(".git")
     end
@@ -69,21 +69,20 @@ module PackIt
     if not PreProcessor.are_the_arguments_valid?(arguments)
       puts "
             Pack It - Create a folder with the different files between two git branches.
-            
-            Example: ./pack_it.rb package a_branch another_branch
-            
-            package => folder where the files are copied
-            a_branch => first branch used in the comparison
-            another_branch = second branch used in the comparison
-            
-            
+
+            Example: ./pack_it.rb directory_package a_branch another_branch
+
+            directory_package => folder where the files will be copied
+            a_branch => first(main) branch used in the comparison (Example: master)
+            another_branch = second branch used in the comparison (Example: my_fixes)
+
             Developed by Rodrigo Lazoti (rodrigolazoti@gmail.com)
             http://www.rodrigolazoti.com.br
            "
 
     elsif not PreProcessor.is_the_git_installed?
       puts "
-            You have nothing GIT client in this machine. 
+            You have nothing GIT client in this machine.
             Please, install it!
            "
 
@@ -99,3 +98,4 @@ module PackIt
 end
 
 PackIt::run(ARGV)
+
